@@ -1,0 +1,105 @@
+// import { Song } from '../types';
+
+// export const songsData: Song[] = [
+//   {
+//     id: 1,
+//     title: "Midnight Dreams",
+//     artist: "The Harmonics",
+//     album: "Night Sessions",
+//     duration: "3:45",
+//     cover: "https://images.unsplash.com/photo-1752830457847-97ac95b93a07?w=400",
+//     isLiked: true,
+//     size: "8.5 MB",
+//     quality: "320 kbps",
+//     lyrics: [
+//       { time: 0, text: "In the silence of the night" },
+//       { time: 5, text: "I hear the echoes calling" },
+//       { time: 10, text: "Midnight dreams are taking flight" },
+//       { time: 15, text: "As the stars keep falling" },
+//       { time: 20, text: "" },
+//       { time: 22, text: "Through the shadows we will dance" },
+//       { time: 27, text: "Lost in this moment forever" },
+//       { time: 32, text: "Give our hearts another chance" },
+//       { time: 37, text: "We'll never say never" },
+//       { time: 42, text: "" },
+//       { time: 45, text: "Midnight dreams, oh they feel so right" },
+//       { time: 50, text: "Holding you close till the morning light" },
+//       { time: 55, text: "In your arms I find my peace" },
+//       { time: 60, text: "Where all the chaos seems to cease" },
+//     ]
+//   },
+//   {
+//     id: 2,
+//     title: "Vinyl Memories",
+//     artist: "Classic Beats",
+//     album: "Retro Vibes",
+//     duration: "4:12",
+//     cover: "https://images.unsplash.com/photo-1757889693310-1e77c6063ba7?w=400",
+//     size: "9.2 MB",
+//     quality: "320 kbps",
+//     lyrics: [
+//       { time: 0, text: "Dusty records on the shelf" },
+//       { time: 5, text: "Stories they could tell" },
+//       { time: 10, text: "Spinning round and round" },
+//       { time: 15, text: "That familiar sound" },
+//       { time: 20, text: "" },
+//       { time: 23, text: "Takes me back in time" },
+//       { time: 28, text: "To when you were mine" },
+//       { time: 33, text: "Every scratch and pop" },
+//       { time: 38, text: "Makes my heart just stop" },
+//     ]
+//   },
+//   {
+//     id: 3,
+//     title: "Spotlight",
+//     artist: "Luna Star",
+//     album: "Rising",
+//     duration: "3:28",
+//     cover: "https://images.unsplash.com/photo-1724333191536-4988f7ce0674?w=400",
+//     isLiked: true,
+//     size: "7.8 MB",
+//     quality: "320 kbps",
+//     lyrics: [
+//       { time: 0, text: "Standing in the spotlight now" },
+//       { time: 4, text: "All eyes are on me" },
+//       { time: 8, text: "This is my moment somehow" },
+//       { time: 12, text: "Finally I'm free" },
+//       { time: 16, text: "" },
+//       { time: 18, text: "Rising up from the ground" },
+//       { time: 22, text: "Breaking through the clouds" },
+//       { time: 26, text: "Hear the thundering sound" },
+//       { time: 30, text: "I'm screaming out loud" },
+//     ]
+//   },
+//   {
+//     id: 4,
+//     title: "Urban Flow",
+//     artist: "MC Rhythm",
+//     album: "Street Poetry",
+//     duration: "3:56",
+//     cover: "https://images.unsplash.com/photo-1647220419119-316822d9d053?w=400",
+//     size: "8.9 MB",
+//     quality: "320 kbps"
+//   },
+//   {
+//     id: 5,
+//     title: "Electric Pulse",
+//     artist: "DJ Neon",
+//     album: "Synthwave",
+//     duration: "5:23",
+//     cover: "https://images.unsplash.com/photo-1692176548571-86138128e36c?w=400",
+//     isLiked: true,
+//     size: "12.1 MB",
+//     quality: "320 kbps"
+//   },
+//   {
+//     id: 6,
+//     title: "Acoustic Sunrise",
+//     artist: "Sarah Williams",
+//     album: "Morning Coffee",
+//     duration: "4:01",
+//     cover: "https://images.unsplash.com/photo-1684117736387-69935a4ed00d?w=400",
+//     size: "9.0 MB",
+//     quality: "320 kbps"
+//   }
+// ];
