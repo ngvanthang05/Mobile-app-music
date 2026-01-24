@@ -39,11 +39,13 @@ export const privateApi = axios.create({
  */
 
 export const getAuthConfig = (userId?: string) => {
-  const token = sessionStorage.getItem("accessToken");
+  // Note: sessionStorage doesn't exist in React Native
+  // Using empty token for now - authentication is handled by currentUserId header
+  const token = "";
 
   return {
     headers: {
-      Authorization: `Bearer ${token}`,
+      Authorization: token ? `Bearer ${token}` : "",
       currentUserId: userId || "",
       "ngrok-skip-browser-warning": "true"
     }
@@ -62,13 +64,15 @@ export const playlistApi = axios.create({
 });
 
 export const getPlaylistAuthConfig = (userId: string, isAdmin: boolean = false) => {
-  const token = sessionStorage.getItem("accessToken");
+  // Note: sessionStorage doesn't exist in React Native
+  // Using empty token for now - authentication is handled by currentUserId header
+  const token = "";
 
   return {
     headers: {
       currentUserId: userId,
       isAdmin,
-      Authorization: `Bearer ${token}`,
+      Authorization: token ? `Bearer ${token}` : "",
       "ngrok-skip-browser-warning": "true"
     }
   };
@@ -89,7 +93,9 @@ export const liveClient = axios.create({
 
 // Auto attach token
 liveClient.interceptors.request.use((config) => {
-  const token = sessionStorage.getItem("accessToken");
+  // Note: sessionStorage doesn't exist in React Native
+  // Using empty token for now - authentication is handled by currentUserId header
+  const token = "";
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }

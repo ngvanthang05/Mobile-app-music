@@ -31,6 +31,7 @@ export default function NowPlayingScreen({ visible, onClose }: NowPlayingScreenP
     progress,
     setProgress,
     setIsPlaying,
+    seekTo,
     isShuffle,
     repeatMode,
     toggleShuffle,
@@ -75,7 +76,7 @@ export default function NowPlayingScreen({ visible, onClose }: NowPlayingScreenP
             currentSong.artist,
             currentSong.album
           );
-          
+
           // Ưu tiên lấy plainLyrics (lời văn bản), nếu không có thì lấy syncedLyrics (lời có thời gian)
           const lyricData = res.data.plainLyrics || res.data.syncedLyrics || 'No lyrics available for this song.';
           setRawLyrics(lyricData);
@@ -116,10 +117,10 @@ export default function NowPlayingScreen({ visible, onClose }: NowPlayingScreenP
                 onPress={() => setShowLyrics(!showLyrics)}
                 style={styles.lyricsToggle}
               >
-                <Ionicons 
-                  name={showLyrics ? "image-outline" : "musical-notes-outline"} 
-                  size={24} 
-                  color="#67e8f9" 
+                <Ionicons
+                  name={showLyrics ? "image-outline" : "musical-notes-outline"}
+                  size={24}
+                  color="#67e8f9"
                 />
               </TouchableOpacity>
             </View>
@@ -174,7 +175,14 @@ export default function NowPlayingScreen({ visible, onClose }: NowPlayingScreenP
                 minimumValue={0}
                 maximumValue={100}
                 value={progress}
-                onValueChange={setProgress}
+                onValueChange={(value) => {
+                  // Update progress immediately for smooth UI
+                  setProgress(value);
+                }}
+                onSlidingComplete={(value) => {
+                  // Seek the audio to the new position
+                  seekTo(value);
+                }}
                 minimumTrackTintColor="#67e8f9"
                 maximumTrackTintColor="rgba(255,255,255,0.2)"
                 thumbTintColor="#ffffff"

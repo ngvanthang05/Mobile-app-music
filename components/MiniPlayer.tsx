@@ -1,10 +1,8 @@
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
 import { View, Text, TouchableOpacity, Image, Dimensions, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import Slider from '@react-native-community/slider';
 import { useMusic } from '../context/MusicContext';
-import { Audio } from 'expo-av';
-import { fixStreamUrl } from '../utils/audioUrl';
 
 const { width } = Dimensions.get('window');
 
@@ -19,6 +17,7 @@ export default function MiniPlayer({ onPress }: MiniPlayerProps) {
     progress,
     setProgress,
     setIsPlaying,
+    seekTo,
     isShuffle,
     repeatMode,
     toggleShuffle,
@@ -28,78 +27,6 @@ export default function MiniPlayer({ onPress }: MiniPlayerProps) {
     likedSongs,
     toggleLike,
   } = useMusic();
-
-  const soundRef = useRef<Audio.Sound | null>(null);
-
-  // Load & play khi đổi bài
-  useEffect(() => {
-    if (!currentSong) return;
-
-    const loadAndPlay = async () => {
-      try {
-        if (soundRef.current) {
-          await soundRef.current.unloadAsync();
-        }
-
-        const url = fixStreamUrl(currentSong.audioUrl);
-        console.log("🎵 STREAM:", url);
-
-        const { sound } = await Audio.Sound.createAsync(
-          { uri: url },
-          { shouldPlay: true }
-        );
-
-        soundRef.current = sound;
-        setIsPlaying(true);
-
-        sound.setOnPlaybackStatusUpdate((status: any) => {
-          if (status.isLoaded && status.durationMillis) {
-            const percent =
-              (status.positionMillis / status.durationMillis) * 100;
-            setProgress(percent);
-
-            if (status.didJustFinish) {
-              nextSong();
-            }
-          }
-        });
-
-      } catch (err) {
-        console.log("❌ Lỗi phát nhạc:", err);
-      }
-    };
-
-    loadAndPlay();
-
-    return () => {
-      if (soundRef.current) {
-        soundRef.current.unloadAsync();
-      }
-    };
-  }, [currentSong]);
-
-  // Play / Pause
-  useEffect(() => {
-    if (!soundRef.current) return;
-
-    if (isPlaying) {
-      soundRef.current.playAsync();
-    } else {
-      soundRef.current.pauseAsync();
-    }
-  }, [isPlaying]);
-
-  // Seek khi kéo slider
-  const handleSeek = async (value: number) => {
-    if (!soundRef.current) return;
-
-    const status = await soundRef.current.getStatusAsync();
-    if (!status.isLoaded || !status.durationMillis) return;
-
-    const position = (value / 100) * status.durationMillis;
-    await soundRef.current.setPositionAsync(position);
-    setProgress(value);
-  };
 
   if (!currentSong) return null;
 
@@ -163,7 +90,7 @@ export default function MiniPlayer({ onPress }: MiniPlayerProps) {
             minimumValue={0}
             maximumValue={100}
             value={progress}
-            onSlidingComplete={handleSeek}
+            onSlidingComplete={seekTo}
             minimumTrackTintColor="#1f2937"
             maximumTrackTintColor="#e5e7eb"
             thumbTintColor="#ffffff"

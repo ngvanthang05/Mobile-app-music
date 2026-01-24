@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, Image, StyleSheet, ActivityIndicator } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, Image, StyleSheet, ActivityIndicator, Modal } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useMusic } from '../context/MusicContext';
@@ -15,10 +15,11 @@ interface SongApi {
 }
 
 export default function HomeScreen() {
-  const { playSong, likedSongs } = useMusic();
+  const { playSong, likedSongs, songs: allSongs, toggleLike } = useMusic();
 
   const [songs, setSongs] = useState<SongApi[]>([]);
   const [loading, setLoading] = useState(true);
+  const [showLikedModal, setShowLikedModal] = useState(false);
 
   // ======================
   // Load songs from backend
@@ -68,7 +69,11 @@ export default function HomeScreen() {
                     title: song.title,
                     artist: song.artistName,
                     cover: song.coverUrl,
-                    audioUrl: song.streamUrl
+                    audioUrl: song.streamUrl,
+                    album: 'Unknown',
+                    duration: '0:00',
+                    size: '0 MB',
+                    quality: 'streaming'
                   })
                 }
                 activeOpacity={0.7}
@@ -91,19 +96,98 @@ export default function HomeScreen() {
 
         {/* Your Playlists */}
         <Text style={styles.sectionTitle}>Your Playlists</Text>
-        <LinearGradient
-          colors={['#0891b2', '#1e40af']}
-          style={styles.playlistCard}
+        <TouchableOpacity
+          onPress={() => setShowLikedModal(true)}
+          activeOpacity={0.8}
         >
-          <View style={styles.playlistContent}>
-            <Ionicons name="heart" size={28} color="white" />
-            <View style={styles.playlistTextContainer}>
-              <Text style={styles.playlistTitle}>Liked Songs</Text>
-              <Text style={styles.playlistSubtitle}>{likedSongs.length} songs</Text>
+          <LinearGradient
+            colors={['#0891b2', '#1e40af']}
+            style={styles.playlistCard}
+          >
+            <View style={styles.playlistContent}>
+              <Ionicons name="heart" size={28} color="white" />
+              <View style={styles.playlistTextContainer}>
+                <Text style={styles.playlistTitle}>Liked Songs</Text>
+                <Text style={styles.playlistSubtitle}>{likedSongs.length} songs</Text>
+              </View>
             </View>
-          </View>
-        </LinearGradient>
+          </LinearGradient>
+        </TouchableOpacity>
       </ScrollView>
+
+      {/* Liked Songs Modal */}
+      <Modal
+        visible={showLikedModal}
+        transparent={true}
+        animationType="slide"
+        onRequestClose={() => setShowLikedModal(false)}
+      >
+        <View style={styles.modalContainer}>
+          <LinearGradient
+            colors={['#1e3a8a', '#0e7490', '#000000']}
+            style={styles.modalGradient}
+          >
+            {/* Header */}
+            <View style={styles.modalHeader}>
+              <TouchableOpacity
+                onPress={() => setShowLikedModal(false)}
+                style={styles.backButton}
+              >
+                <Ionicons name="arrow-back" size={28} color="white" />
+              </TouchableOpacity>
+              <Text style={styles.modalTitle}>Liked Songs</Text>
+              <View style={{ width: 28 }} />
+            </View>
+
+            {/* Liked Songs List */}
+            <ScrollView style={styles.modalContent} showsVerticalScrollIndicator={false}>
+              {likedSongs.length === 0 ? (
+                <View style={styles.emptyContainer}>
+                  <Ionicons name="heart-outline" size={64} color="#94a3b8" />
+                  <Text style={styles.emptyText}>No liked songs yet</Text>
+                  <Text style={styles.emptySubtext}>Tap the heart icon on songs you love</Text>
+                </View>
+              ) : (
+                allSongs
+                  .filter(song => likedSongs.includes(song.id))
+                  .map((song) => (
+                    <View key={song.id} style={styles.likedSongRow}>
+                      <TouchableOpacity
+                        style={styles.likedSongContent}
+                        onPress={() => {
+                          playSong(song);
+                          setShowLikedModal(false);
+                        }}
+                        activeOpacity={0.7}
+                      >
+                        <Image
+                          source={{ uri: song.cover }}
+                          style={styles.likedSongImage}
+                          resizeMode="cover"
+                        />
+                        <View style={styles.likedSongInfo}>
+                          <Text style={styles.likedSongTitle} numberOfLines={1}>
+                            {song.title}
+                          </Text>
+                          <Text style={styles.likedSongArtist} numberOfLines={1}>
+                            {song.artist}
+                          </Text>
+                        </View>
+                      </TouchableOpacity>
+                      <TouchableOpacity
+                        onPress={() => toggleLike(song.id)}
+                        style={styles.unlikeButton}
+                      >
+                        <Ionicons name="heart" size={24} color="#ec4899" />
+                      </TouchableOpacity>
+                    </View>
+                  ))
+              )}
+            </ScrollView>
+          </LinearGradient>
+        </View>
+      </Modal>
+
     </LinearGradient>
   );
 }
@@ -187,5 +271,88 @@ const styles = StyleSheet.create({
     color: '#cffafe',
     fontSize: 14,
     marginTop: 2,
+  },
+  // Modal styles
+  modalContainer: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.95)',
+  },
+  modalGradient: {
+    flex: 1,
+  },
+  modalHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingTop: 56,
+    paddingHorizontal: 20,
+    paddingBottom: 16,
+  },
+  backButton: {
+    padding: 4,
+  },
+  modalTitle: {
+    flex: 1,
+    color: 'white',
+    fontSize: 20,
+    fontWeight: '600',
+    textAlign: 'center',
+    marginHorizontal: 16,
+  },
+  modalContent: {
+    flex: 1,
+    paddingHorizontal: 24,
+  },
+  emptyContainer: {
+    alignItems: 'center',
+    paddingVertical: 80,
+  },
+  emptyText: {
+    color: 'white',
+    fontSize: 20,
+    fontWeight: '600',
+    marginTop: 16,
+  },
+  emptySubtext: {
+    color: '#94a3b8',
+    fontSize: 14,
+    marginTop: 8,
+    textAlign: 'center',
+  },
+  likedSongRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 12,
+  },
+  likedSongContent: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'rgba(255, 255, 255, 0.05)',
+    borderRadius: 12,
+    padding: 12,
+  },
+  likedSongImage: {
+    width: 56,
+    height: 56,
+    borderRadius: 4,
+  },
+  likedSongInfo: {
+    flex: 1,
+    marginLeft: 12,
+    marginRight: 12,
+  },
+  likedSongTitle: {
+    color: 'white',
+    fontWeight: '500',
+    marginBottom: 4,
+  },
+  likedSongArtist: {
+    color: '#67e8f9',
+    fontSize: 14,
+  },
+  unlikeButton: {
+    padding: 8,
+    marginLeft: 8,
   },
 });

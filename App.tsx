@@ -9,7 +9,7 @@ import HomeScreen from './screens/HomeScreen';
 import SearchScreen from './screens/SearchScreen';
 import LibraryScreen from './screens/LibraryScreen';
 import PremiumScreen from './screens/PremiumScreen';
-import PodcastScreen from './screens/PodcastScreen';
+import LiveScreen from './screens/LiveScreen';
 import MiniPlayer from './components/MiniPlayer';
 import NowPlayingScreen from './components/NowPlayingScreen';
 import { MusicProvider } from './context/MusicContext';
@@ -34,8 +34,8 @@ export default function App() {
                   iconName = focused ? 'search' : 'search-outline';
                 } else if (route.name === 'Library') {
                   iconName = focused ? 'library' : 'library-outline';
-                } else if (route.name === 'Podcast') {
-                  iconName = focused ? 'mic' : 'mic-outline';
+                } else if (route.name === 'Live') {
+                  iconName = focused ? 'radio' : 'radio-outline';
                 } else if (route.name === 'Premium') {
                   iconName = focused ? 'diamond' : 'diamond-outline';
                 }
@@ -62,7 +62,7 @@ export default function App() {
           >
             <Tab.Screen name="Home" component={HomeScreen} />
             <Tab.Screen name="Search" component={SearchScreen} />
-            <Tab.Screen name="Podcast" component={PodcastScreen} />
+            <Tab.Screen name="Live" component={LiveScreen} />
             <Tab.Screen name="Library" component={LibraryScreen} />
             <Tab.Screen name="Premium" component={PremiumScreen} />
           </Tab.Navigator>
