@@ -36,3 +36,10 @@ export interface MusicContextType {
   removeSongFromPlaylist: (playlistId: string, songId: string) => Promise<void>; // New function
   deletePlaylist: (playlistId: string) => Promise<void>; // Delete playlist function
 }
+
+export interface ChatMessage {
+  id: string;
+  content: string;
+  sender: 'user' | 'ai';
+  timestamp: Date;
+}

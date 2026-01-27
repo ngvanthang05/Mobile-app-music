@@ -12,12 +12,15 @@ import PremiumScreen from './screens/PremiumScreen';
 import LiveScreen from './screens/LiveScreen';
 import MiniPlayer from './components/MiniPlayer';
 import NowPlayingScreen from './components/NowPlayingScreen';
+import FloatingChatButton from './components/FloatingChatButton';
+import ChatModal from './components/ChatModal';
 import { MusicProvider } from './context/MusicContext';
 
 const Tab = createBottomTabNavigator();
 
 export default function App() {
   const [showNowPlaying, setShowNowPlaying] = useState(false);
+  const [showChatbox, setShowChatbox] = useState(false);
 
   return (
     <SafeAreaProvider>
@@ -69,9 +72,16 @@ export default function App() {
 
           <MiniPlayer onPress={() => setShowNowPlaying(true)} />
 
+          <FloatingChatButton onPress={() => setShowChatbox(true)} />
+
           <NowPlayingScreen
             visible={showNowPlaying}
             onClose={() => setShowNowPlaying(false)}
+          />
+
+          <ChatModal
+            visible={showChatbox}
+            onClose={() => setShowChatbox(false)}
           />
 
           <StatusBar style="light" />
