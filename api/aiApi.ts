@@ -5,7 +5,7 @@
  * AI that understands your music app's data
  */
 
-const GEMINI_API_KEY = 'AIzaSyDBs1QKi_HTiN-1sxakQp4kF0FAeVBzIBU';
+const GEMINI_API_KEY = 'AIzaSyB9iv0mOQl_OAfko3GuZrVF_sTsNydNrKY';
 const GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`;
 
 // Store app context for AI
